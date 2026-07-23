@@ -105,8 +105,12 @@ if run:
     result_col1, result_col2 = st.columns(2)
     with result_col1:
         st.metric("Churn Probability", f"{prediction_proba:.1%}")
-        st.progress(min(prediction_proba, 1.0))
+        st.progress(float(min(prediction_proba, 1.0)))
     with result_col2:
         st.markdown(f"### :{color}[{risk_tier}]")
-        verdict = "likely to churn" if prediction == 1 else "not likely to churn"
-        st.write(f"This customer is **{verdict}**.")
+
+    st.divider()
+    if prediction == 1:
+        st.error(f"⚠️ **Final Verdict: This customer IS likely to churn** (probability: {prediction_proba:.1%}).")
+    else:
+        st.success(f"✅ **Final Verdict: This customer is NOT likely to churn** (probability: {prediction_proba:.1%}).")
